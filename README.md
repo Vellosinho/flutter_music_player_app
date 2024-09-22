@@ -1,6 +1,6 @@
-# beatful
+# flutter_music_player_app (beatful)
 
-A new Flutter project.
+Flutter music player using provider and audioplayers lib.
 
 ## Getting Started
 
