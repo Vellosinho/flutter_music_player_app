@@ -10,8 +10,8 @@ class MusicPlayerProvider extends ChangeNotifier {
   final List<List<int>> _visualizerValues = [];
   List<List<int>> get visualizerValues => _visualizerValues;
 
-  List<SongModel> currentPlaylist = songs;
-  int currentSongIndex = 0; 
+  List<SongModel> _currentPlaylist = songs;
+  int _currentSongIndex = 0; 
 
   //Player related values:
   bool _playerIsShowing =  false;
@@ -179,22 +179,34 @@ class MusicPlayerProvider extends ChangeNotifier {
   }
 
   void jumpSong() {
-    if(currentSongIndex >= songs.length - 1) {
-      currentSongIndex = 0;
-      updateSong(songs[currentSongIndex]);
+    if(_currentSongIndex >= _currentPlaylist.length - 1) {
+      _currentSongIndex = 0;
+      updateSong(_currentPlaylist[_currentSongIndex]);
     } else {
-      updateSong(songs[++currentSongIndex]);
+      updateSong(_currentPlaylist[++_currentSongIndex]);
     }
     _audioPlayer.resume();
     notifyListeners();
   }
 
+  void chooseSong(List<SongModel> playlist, int index) {
+    _currentPlaylist = playlist;
+    _currentSongIndex = index;
+    updateSong(_currentPlaylist[_currentSongIndex]);
+    _audioPlayer.resume();
+    if (!_playerIsShowing) {
+      openPlayer();
+      toggleNavigationBar();
+    }
+    notifyListeners();
+  }
+
   void jumpBackSong() {
-    if (currentSongIndex <= 0) {
-      currentSongIndex = (songs.length - 1);
-      updateSong(songs[currentSongIndex]);
+    if (_currentSongIndex <= 0) {
+      _currentSongIndex = (_currentPlaylist.length - 1);
+      updateSong(_currentPlaylist[_currentSongIndex]);
     } else {
-      updateSong(songs[--currentSongIndex]);
+      updateSong(_currentPlaylist[--_currentSongIndex]);
     }
     _audioPlayer.resume();
     notifyListeners();

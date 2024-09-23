@@ -14,16 +14,16 @@ class Visualizer extends StatelessWidget {
         children: [
           PlayinVisualIndicator(rotation: 00, milliseconds: controller.visualizerBPM, radiusValues: controller.visualizerValues[0], color: ColorPalette.visualizerDarkColor,),
           PlayinVisualIndicator(rotation: 300, milliseconds: controller.visualizerBPM, radiusValues: controller.visualizerValues[1], color: ColorPalette.visualizerDarkColor,),
-          PlayinVisualIndicator(rotation: 150, milliseconds: controller.visualizerBPM, radiusValues: controller.visualizerValues[2], color: ColorPalette.visualizerDarkColor,),
-          PlayinVisualIndicator(rotation: 450, milliseconds: controller.visualizerBPM, radiusValues: controller.visualizerValues[3], color: ColorPalette.visualizerDarkColor,),
+          // PlayinVisualIndicator(rotation: 150, milliseconds: controller.visualizerBPM, radiusValues: controller.visualizerValues[2], color: ColorPalette.visualizerDarkColor,),
+          // PlayinVisualIndicator(rotation: 450, milliseconds: controller.visualizerBPM, radiusValues: controller.visualizerValues[3], color: ColorPalette.visualizerDarkColor,),
           PlayinVisualIndicator(rotation: 100, milliseconds: controller.visualizerBPM, radiusValues: controller.visualizerValues[4], color: ColorPalette.visualizerMediumColor,),
           PlayinVisualIndicator(rotation: 400, milliseconds: controller.visualizerBPM, radiusValues: controller.visualizerValues[5], color: ColorPalette.visualizerMediumColor,),
-          PlayinVisualIndicator(rotation: 250, milliseconds: controller.visualizerBPM, radiusValues: controller.visualizerValues[6], color: ColorPalette.visualizerMediumColor,),
-          PlayinVisualIndicator(rotation: 550, milliseconds: controller.visualizerBPM, radiusValues: controller.visualizerValues[7], color: ColorPalette.visualizerMediumColor,),
+          // PlayinVisualIndicator(rotation: 250, milliseconds: controller.visualizerBPM, radiusValues: controller.visualizerValues[6], color: ColorPalette.visualizerMediumColor,),
+          // PlayinVisualIndicator(rotation: 550, milliseconds: controller.visualizerBPM, radiusValues: controller.visualizerValues[7], color: ColorPalette.visualizerMediumColor,),
           PlayinVisualIndicator(rotation: 200, milliseconds: controller.visualizerBPM, radiusValues: controller.visualizerValues[8], color: ColorPalette.visualizerLightColor,),
           PlayinVisualIndicator(rotation: 500, milliseconds: controller.visualizerBPM, radiusValues: controller.visualizerValues[9], color: ColorPalette.visualizerLightColor,),
-          PlayinVisualIndicator(rotation: 350, milliseconds: controller.visualizerBPM, radiusValues: controller.visualizerValues[10], color: ColorPalette.visualizerLightColor,),
-          PlayinVisualIndicator(rotation: 650, milliseconds: controller.visualizerBPM, radiusValues: controller.visualizerValues[11], color: ColorPalette.visualizerLightColor,),
+          // PlayinVisualIndicator(rotation: 350, milliseconds: controller.visualizerBPM, radiusValues: controller.visualizerValues[10], color: ColorPalette.visualizerLightColor,),
+          // PlayinVisualIndicator(rotation: 650, milliseconds: controller.visualizerBPM, radiusValues: controller.visualizerValues[11], color: ColorPalette.visualizerLightColor,),
         ]
       ),
     );

@@ -59,50 +59,52 @@ class OverlayGradientWidget extends StatelessWidget {
     return Column(
       children: [
         SizedBox(
-            height: height,
-            width: width,
-            child: ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.circular(24)),
-                child: SizedBox(
-                  child: Stack(
-                    children: [
-                      child,
-                      SizedBox(
-                        height: height,
+          height: height,
+          width: width,
+          child: ClipRRect(
+            borderRadius: const BorderRadius.all(Radius.circular(24)),
+            child: SizedBox(
+              child: Stack(
+                children: [
+                  child,
+                  SizedBox(
+                    height: height,
+                    width: width,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                      colors: [
+                        selectedGradientColor.withOpacity(gradientTopValue ?? 0),
+                        selectedGradientColor.withOpacity(gradientBottomValue ?? 0.65)
+                      ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    )))),
+                    Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: SizedBox(
                         width: width,
-                        child: DecoratedBox(
-                            decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                          colors: [
-                            selectedGradientColor.withOpacity(gradientTopValue ?? 0),
-                            selectedGradientColor.withOpacity(gradientBottomValue ?? 0.65)
-                          ],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                        )))),
-                        Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: SizedBox(
-                            width: width,
-                            height: height,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
+                        height: height,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Row(
                               children: [
-                                Row(
-                                  children: [
-                                    SizedBox(child: topWidget),
-                                  ],
-                                ),
+                                SizedBox(child: topWidget),
                               ],
-                          ),
-                                                ),
-                        )
-                  ],
-                )))),
+                            ),
+                          ],
+                      ),
+                    ),
+                )
+              ],
+            )))),
         const SizedBox(height: 8),
         SizedBox(
           width: width,
           child: Text(
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2,
             description,
             style: GoogleFonts.robotoCondensed(
               fontSize: 15,
@@ -118,21 +120,27 @@ class OverlayGradientWidget extends StatelessWidget {
 }
 
 class ArtistImages extends StatelessWidget {
+  final Function onTap;
   final String imagePath;
   final String playlistDescription;
 
   const ArtistImages(
-      {required this.imagePath, required this.playlistDescription, super.key});
+      {required this.imagePath, required this.onTap, required this.playlistDescription, super.key});
 
   @override
   Widget build(BuildContext context) {
-    return OverlayGradientWidget(
-      description: playlistDescription,
-      gradientColor: ColorPalette.primaryButtonColor,
-      height: 140,
-      width: 140,
-      child: Image.asset(
-        imagePath,
+    return GestureDetector(
+      onTap: () {
+        onTap();
+      },
+      child: OverlayGradientWidget(
+        description: playlistDescription,
+        gradientColor: ColorPalette.primaryButtonColor,
+        height: 140,
+        width: 140,
+        child: Image.asset(
+          imagePath,
+        ),
       ),
     );
   }

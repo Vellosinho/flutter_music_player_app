@@ -61,7 +61,7 @@ SongModel sweetNothing = SongModel(
   songFilePath: 'songs_folder/taylor_swift_sweet_nothing.mp3',
   songTitle: 'Sweet Nothing',
   album: midnights,
-  songBPM: 176,
+  songBPM: 88,
 );
 
 SongModel timeless = SongModel(
