@@ -13,18 +13,24 @@ class FullPlayer extends StatelessWidget {
     return Consumer<MusicPlayerProvider>(
       builder: (context, controller, _) => Stack(
         children: [
-          Opacity(
-              opacity: 0.15,
-              child: Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(
-                        controller.currentSong.album.albumCover),
-                    fit: BoxFit.cover,
+          ClipRRect(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(32),
+              topRight: Radius.circular(32),
+            ),
+            child: Opacity(
+                opacity: 0.15,
+                child: Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(
+                          controller.currentSong.album.albumCover),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
-            ),
+          ),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Column(

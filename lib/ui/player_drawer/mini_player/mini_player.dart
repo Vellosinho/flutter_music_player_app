@@ -2,7 +2,6 @@ import 'package:beatful/consts.dart';
 import 'package:beatful/controller/music_player_controller.dart';
 import 'package:beatful/ui/player_drawer/animated_drawer_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';

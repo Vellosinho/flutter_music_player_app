@@ -38,8 +38,8 @@ class PlayerSliderBar extends StatelessWidget {
 
   
   String formatTime(double time) {
-    int minutes = (time.toInt() ~/ 60);
-    int seconds = (time.toInt() % 60);
+    int minutes = (time.toInt() ~/ 60000);
+    int seconds = (time.toInt() % 60000) ~/ 1000;
 
     String minutesFormated;
     String secondsFormated;

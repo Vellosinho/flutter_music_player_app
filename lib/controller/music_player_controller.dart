@@ -17,6 +17,7 @@ class MusicPlayerProvider extends ChangeNotifier {
   bool _playerIsShowing =  false;
   bool _navigationBarIsShowing = true;
   bool _songIsPlaying = false;
+  bool _isSkippingSong = false;
   final AudioPlayer _audioPlayer = AudioPlayer();
   late final AnimationController _animationController;
   late double _duration;
@@ -91,6 +92,7 @@ class MusicPlayerProvider extends ChangeNotifier {
     _currentSong = song;
 
     await _audioPlayer.play(AssetSource(currentSong.songFilePath));
+    _isSkippingSong = true;
     
     if (_songIsPlaying) {
       _audioPlayer.resume();
@@ -104,37 +106,47 @@ class MusicPlayerProvider extends ChangeNotifier {
 
   void getSongDuration() async{
     Duration songDuration = await _audioPlayer.getDuration() ?? Duration.zero;
-    _duration = songDuration.inSeconds.toDouble();
+    _duration = songDuration.inMilliseconds.toDouble();
     Duration songPosition = await _audioPlayer.getCurrentPosition() ?? Duration.zero;
-    _position = songPosition.inSeconds.toDouble();
+    _position = songPosition.inMilliseconds.toDouble();
 
 
   }
 
   void updatePosition() async {
     Duration songPosition = await _audioPlayer.getCurrentPosition() ?? Duration.zero;
-    _position = songPosition.inSeconds.toDouble();
+    _position = songPosition.inMilliseconds.toDouble();
     notifyListeners();
-    // if(_position == _duration) {
-    //   jumpSong();
-    // }
 
-    Future.delayed(const Duration(milliseconds: 1000), () {
+    Future.delayed(const Duration(milliseconds: 1000), () async {
+      Duration songPosition = await _audioPlayer.getCurrentPosition() ?? Duration.zero;
+      _position = songPosition.inMilliseconds.toDouble();
       checkPosition();
+    });
+
+    Future.delayed(const Duration(milliseconds: 5000), () {
+      _isSkippingSong = false;
     });
   }
   
   void checkPosition() async {
-    Duration songPosition = await _audioPlayer.getCurrentPosition() ?? Duration.zero;
-    _position = songPosition.inSeconds.toDouble();
-    notifyListeners();
-    if(_position == _duration) {
-      jumpSong();
+    if(!_isSkippingSong) {
+      Duration songPosition = await _audioPlayer.getCurrentPosition() ?? Duration.zero;
+      _position = songPosition.inMilliseconds.toDouble();
+      if((_position == _duration || songPosition == Duration.zero) && (_songIsPlaying)) {
+        jumpSong();
+        updatePosition();
+      } else {
+        Future.delayed(const Duration(milliseconds: 1000), () {
+        checkPosition();
+      });}
+    } else {
+      Future.delayed(const Duration(milliseconds: 1500), () {
+        updatePosition();
+      });
     }
+    notifyListeners();
 
-    Future.delayed(const Duration(milliseconds: 1000), () {
-      checkPosition();
-    });
   }
 
   void getVisualizerTime() {
