@@ -27,7 +27,7 @@ class PlayerSliderBar extends StatelessWidget {
           max: controller.duration,
           value: controller.position,
           onChanged: (value) async {
-            final position = Duration(seconds: value.toInt());
+            final position = Duration(milliseconds: value.toInt());
             controller.changeSongPosition(position);
           },
           ),

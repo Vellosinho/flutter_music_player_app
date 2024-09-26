@@ -30,7 +30,8 @@ class ListenAgain extends StatelessWidget {
                       controller.chooseSong(songs, index);
                     },
                     playlistDescription: '${songs[index].songTitle} - ${songs[index].album.albumArtist}',
-                  )
+                  ),
+                  SizedBox(width: (index == songs.length - 1) ? 32 : 0),
                 ],);
               },
                 // const SizedBox(width: 32),

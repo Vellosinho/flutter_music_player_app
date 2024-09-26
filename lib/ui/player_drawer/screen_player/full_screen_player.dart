@@ -3,6 +3,7 @@ import 'package:beatful/ui/player_drawer/screen_player/screen_player_widgets/ful
 import 'package:beatful/ui/player_drawer/screen_player/screen_player_widgets/full_screen_player_slider.dart';
 import 'package:beatful/ui/player_drawer/screen_player/screen_player_widgets/full_screen_song_info.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 class FullPlayer extends StatelessWidget {
@@ -37,11 +38,12 @@ class FullPlayer extends StatelessWidget {
                 children: [
                   FullScreenSongInfo(),
                   PlayerSliderBar(),
-                  SizedBox(height: 24),
+                  SizedBox(height: 8),
                   PlayerBar()
                 ],
               ),
             ),
+            const Positioned(right: 40, top: 40, child: Icon(FontAwesomeIcons.heart))
           ],),
         
     );

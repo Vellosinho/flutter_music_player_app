@@ -4,6 +4,7 @@ import 'package:beatful/model/song_model.dart';
 import 'package:beatful/playlist/songs.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class MusicPlayerProvider extends ChangeNotifier {
   //Visualizer values list:
@@ -13,6 +14,9 @@ class MusicPlayerProvider extends ChangeNotifier {
   List<SongModel> _currentPlaylist = songs;
   int _currentSongIndex = 0; 
 
+  //Secure Storage:
+  final _storage = const FlutterSecureStorage();
+
   //Player related values:
   bool _playerIsShowing =  false;
   bool _navigationBarIsShowing = true;
@@ -20,8 +24,8 @@ class MusicPlayerProvider extends ChangeNotifier {
   bool _isSkippingSong = false;
   final AudioPlayer _audioPlayer = AudioPlayer();
   late final AnimationController _animationController;
-  late double _duration;
-  late double _position;
+  double _duration = 0;
+  double _position = 0;
   late int _visualizerBPM;
   late SongModel _currentSong;
 
@@ -67,9 +71,13 @@ class MusicPlayerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void initPlayer(AnimationController newController, SongModel song) {
+  void initPlayer(AnimationController newController, SongModel song) async {
+    _currentSongIndex = 0;
+    _duration = 0;
     _animationController = newController;
-    setSong(song);
+    String songIndex = await _storage.read(key: 'SongIndex') ?? '0';
+    _currentSongIndex = int.parse(songIndex);
+    setSong(_currentPlaylist[_currentSongIndex]);
     getVisualizerTime();
     updatePosition();
   }
@@ -87,12 +95,12 @@ class MusicPlayerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateSong(SongModel song) async {
-    // await _audioPlayer.play(AssetSource('songs_folder/taylor_swift_lavender_haze.mp3'));
-    _currentSong = song;
+  void updateSong(List<SongModel> playlist, int index) async {
+    _isSkippingSong = true;
+    _currentSong = playlist[index];
+    _storage.write(key: 'SongIndex', value: index.toString());
 
     await _audioPlayer.play(AssetSource(currentSong.songFilePath));
-    _isSkippingSong = true;
     
     if (_songIsPlaying) {
       _audioPlayer.resume();
@@ -118,7 +126,7 @@ class MusicPlayerProvider extends ChangeNotifier {
     _position = songPosition.inMilliseconds.toDouble();
     notifyListeners();
 
-    Future.delayed(const Duration(milliseconds: 1000), () async {
+    Future.delayed(const Duration(milliseconds: 500), () async {
       Duration songPosition = await _audioPlayer.getCurrentPosition() ?? Duration.zero;
       _position = songPosition.inMilliseconds.toDouble();
       checkPosition();
@@ -137,11 +145,11 @@ class MusicPlayerProvider extends ChangeNotifier {
         jumpSong();
         updatePosition();
       } else {
-        Future.delayed(const Duration(milliseconds: 1000), () {
+        Future.delayed(const Duration(milliseconds: 500), () {
         checkPosition();
       });}
     } else {
-      Future.delayed(const Duration(milliseconds: 1500), () {
+      Future.delayed(const Duration(milliseconds: 1000), () {
         updatePosition();
       });
     }
@@ -193,9 +201,9 @@ class MusicPlayerProvider extends ChangeNotifier {
   void jumpSong() {
     if(_currentSongIndex >= _currentPlaylist.length - 1) {
       _currentSongIndex = 0;
-      updateSong(_currentPlaylist[_currentSongIndex]);
+      updateSong(_currentPlaylist ,_currentSongIndex);
     } else {
-      updateSong(_currentPlaylist[++_currentSongIndex]);
+      updateSong(_currentPlaylist, ++_currentSongIndex);
     }
     _audioPlayer.resume();
     notifyListeners();
@@ -204,7 +212,7 @@ class MusicPlayerProvider extends ChangeNotifier {
   void chooseSong(List<SongModel> playlist, int index) {
     _currentPlaylist = playlist;
     _currentSongIndex = index;
-    updateSong(_currentPlaylist[_currentSongIndex]);
+    updateSong(_currentPlaylist, _currentSongIndex);
     _audioPlayer.resume();
     if (!_playerIsShowing) {
       openPlayer();
@@ -214,13 +222,20 @@ class MusicPlayerProvider extends ChangeNotifier {
   }
 
   void jumpBackSong() {
-    if (_currentSongIndex <= 0) {
-      _currentSongIndex = (_currentPlaylist.length - 1);
-      updateSong(_currentPlaylist[_currentSongIndex]);
+    // Checks if song should be restarted:
+    // Will restart if song position > 10 seconds
+    if (_position >= 5000) {
+      changeSongPosition(Duration.zero);
+      _isSkippingSong = true;
     } else {
-      updateSong(_currentPlaylist[--_currentSongIndex]);
+      if (_currentSongIndex <= 0) {
+        _currentSongIndex = (_currentPlaylist.length - 1);
+        updateSong(_currentPlaylist, _currentSongIndex);
+      } else {
+        updateSong(_currentPlaylist, --_currentSongIndex);
+      }
+      _audioPlayer.resume();
     }
-    _audioPlayer.resume();
     notifyListeners();
   }
 }

@@ -25,17 +25,11 @@ class MiniPlayer extends StatelessWidget {
                     height: 64,
                     width: 64,
                     child: DecoratedBox(
-                      decoration: BoxDecoration(boxShadow: const [
-                        BoxShadow(
-                          offset: Offset(6, 0),
-                          color: ColorPalette.primaryButtonColor,
-                          blurRadius: 6,
-                        )
-                      ],
+                      decoration: BoxDecoration(
                       border: Border.all(width: 1, color: ColorPalette.primaryBackgroundColor),
                       borderRadius: BorderRadius.circular(36),),
                       child: Padding(
-                        padding: const EdgeInsets.all(1),
+                        padding: const EdgeInsets.all(2),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(36),
                           child: Image.asset(
